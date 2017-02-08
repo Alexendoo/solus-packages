@@ -17,7 +17,7 @@ const (
 	verifyAddr = "https://packages.solus-project.com/shannon/eopkg-index.xml.sha1sum"
 )
 
-func Download(cacheDir string) error {
+func Download(indexAddr, verifyAddr, cacheDir string) error {
 	// create cache directory if it doesn't exist
 	err := os.MkdirAll(cacheDir, 0700)
 	if err != nil {

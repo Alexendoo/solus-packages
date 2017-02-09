@@ -9,6 +9,6 @@ import (
 func main() {
 	// log.Println(packages.Download(packages.CachePath()))
 
-	reader, _ := os.Open(`C:\Users\Alex\AppData\Local\Solus Packages\eopkg-index.xml`)
+	reader, _ := os.Open(`eopkg-index.xml`)
 	packages.Decode(reader)
 }

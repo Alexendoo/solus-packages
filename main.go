@@ -11,4 +11,6 @@ func main() {
 
 	reader, _ := os.Open(`eopkg-index.xml`)
 	packages.Decode(reader)
+
+	// search.Search()
 }

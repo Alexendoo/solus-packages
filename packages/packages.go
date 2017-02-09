@@ -73,7 +73,12 @@ import (
 // </Package>
 
 type PISI struct {
-	Packages []Package `xml:"Package"`
+	Distribution Distribution
+	Packages     []*Package `xml:"Package"`
+}
+
+type Distribution struct {
+	Obsoletes []string `xml:"Obsoletes>Package"`
 }
 
 type Package struct {
@@ -82,8 +87,8 @@ type Package struct {
 	Description         string
 	PartOf              string
 	License             string
-	RuntimeDependencies []Dependency
-	Updates             []Update `xml:"History>Update"`
+	RuntimeDependencies []*Dependency
+	Updates             []*Update `xml:"History>Update"`
 	Source              Source
 }
 
@@ -112,7 +117,7 @@ type Packager struct {
 	Email string
 }
 
-func Decode(reader io.Reader) *PISI {
+func Decode(reader io.Reader) []*Package {
 	decoder := xml.NewDecoder(reader)
 	pkg := &PISI{}
 	decoder.Decode(pkg)
@@ -121,5 +126,5 @@ func Decode(reader io.Reader) *PISI {
 	buff := bytes.NewBuffer(b)
 	buff.WriteTo(os.Stdout)
 	os.Stdout.WriteString("\n")
-	return pkg
+	return pkg.Packages
 }

@@ -1,0 +1,3 @@
+package: github.com/Alexendoo/solus-packages
+import:
+- package: github.com/blevesearch/bleve

@@ -9,7 +9,7 @@ import (
 func main() {
 	// log.Println(packages.Download(packages.CachePath()))
 
-	reader, _ := os.Open(`eopkg-index.xml`)
+	reader, _ := os.Open(`eopkg-test.xml`)
 	packages.Decode(reader)
 
 	// search.Search()

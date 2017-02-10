@@ -5,8 +5,29 @@ import (
 
 	"os"
 
+	"log"
+
+	"github.com/Alexendoo/solus-packages/packages"
 	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/analysis/lang/en"
+	"github.com/blevesearch/bleve/mapping"
 )
+
+func Index(packages *packages.PISI, index bleve.Index) {
+	for _, obsolete := range packages.Distribution.Obsoletes {
+		err := index.Delete(obsolete)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	for _, pkg := range packages.Packages {
+		err := index.Index(pkg.Name, pkg)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+}
 
 func Search() {
 	// open a new index
@@ -50,4 +71,30 @@ func Search() {
 
 	index.Close()
 	os.RemoveAll("example.bleve")
+}
+
+func getMapping() mapping.IndexMapping {
+	mapping := bleve.NewIndexMapping()
+	mapping.DefaultAnalyzer = en.AnalyzerName
+
+	return mapping
+}
+
+func getIndex(path string) (bleve.Index, error) {
+	index, err := bleve.Open(path)
+	if err == nil {
+		return index, nil
+	}
+	if err != bleve.ErrorIndexPathDoesNotExist {
+		return nil, err
+	}
+
+	mapping := getMapping()
+
+	index, err = bleve.New(path, mapping)
+	if err != nil {
+		return nil, err
+	}
+
+	return index, nil
 }

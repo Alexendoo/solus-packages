@@ -1,6 +1,6 @@
 // +build linux darwin
 
-package packages
+package config
 
 import (
 	"os"
